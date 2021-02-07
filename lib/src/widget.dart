@@ -307,7 +307,7 @@ class _MarkdownWidgetState extends State<MarkdownWidget>
         widget.onLongPressLink!(text, href, title);
       }
     };
-    _recognizers.addAll(recognizer, longPressGestureRecognizer);
+    _recognizers.addAll([recognizer, longPressGestureRecognizer]);
     return recognizer;
   }
 
