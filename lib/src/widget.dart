@@ -129,6 +129,7 @@ abstract class MarkdownWidget extends StatefulWidget {
     this.styleSheetTheme = MarkdownStyleSheetBaseTheme.material,
     this.syntaxHighlighter,
     this.onTapLink,
+    this.onLongPressLink,
     this.imageDirectory,
     this.blockSyntaxes,
     this.inlineSyntaxes,
@@ -166,6 +167,9 @@ abstract class MarkdownWidget extends StatefulWidget {
 
   /// Called when the user taps a link.
   final MarkdownTapLinkCallback? onTapLink;
+
+  /// Called when the user taps a link for a long period of time.
+  final MarkdownTapLinkCallback? onLongPressLink;
 
   /// The base directory holding images referenced by Img tags with local or network file paths.
   final String? imageDirectory;
@@ -297,7 +301,13 @@ class _MarkdownWidgetState extends State<MarkdownWidget>
           widget.onTapLink!(text, href, title);
         }
       };
-    _recognizers.add(recognizer);
+    final LongPressGestureRecognizer longPressGestureRecognizer = LongPressGestureRecognizer()
+    ..onLongPress = () {
+      if (widget.onLongPressLink != null) {
+        widget.onLongPressLink!(text, href, title);
+      }
+    };
+    _recognizers.addAll(recognizer, longPressGestureRecognizer);
     return recognizer;
   }
 
@@ -333,6 +343,7 @@ class MarkdownBody extends MarkdownWidget {
     MarkdownStyleSheetBaseTheme? styleSheetTheme,
     SyntaxHighlighter? syntaxHighlighter,
     MarkdownTapLinkCallback? onTapLink,
+    MarkdownTapLinkCallback? onLongPressLink,
     String? imageDirectory,
     List<md.BlockSyntax>? blockSyntaxes,
     List<md.InlineSyntax>? inlineSyntaxes,
@@ -352,6 +363,7 @@ class MarkdownBody extends MarkdownWidget {
           styleSheetTheme: styleSheetTheme,
           syntaxHighlighter: syntaxHighlighter,
           onTapLink: onTapLink,
+          onLongPressLink: onLongPressLink,
           imageDirectory: imageDirectory,
           blockSyntaxes: blockSyntaxes,
           inlineSyntaxes: inlineSyntaxes,
@@ -399,6 +411,7 @@ class Markdown extends MarkdownWidget {
     MarkdownStyleSheetBaseTheme? styleSheetTheme,
     SyntaxHighlighter? syntaxHighlighter,
     MarkdownTapLinkCallback? onTapLink,
+    MarkdownTapLinkCallback? onLongPressLink,
     String? imageDirectory,
     List<md.BlockSyntax>? blockSyntaxes,
     List<md.InlineSyntax>? inlineSyntaxes,
@@ -420,6 +433,7 @@ class Markdown extends MarkdownWidget {
           styleSheetTheme: styleSheetTheme,
           syntaxHighlighter: syntaxHighlighter,
           onTapLink: onTapLink,
+          onLongPressLink: onLongPressLink,
           imageDirectory: imageDirectory,
           blockSyntaxes: blockSyntaxes,
           inlineSyntaxes: inlineSyntaxes,
